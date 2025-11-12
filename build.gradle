@@ -32,6 +32,7 @@ dependencies {
     implementation 'com.mybatis-flex:mybatis-flex-spring-boot3-starter:1.11.3'
     implementation 'com.alibaba.fastjson2:fastjson2:2.0.54'
     implementation 'commons-codec:commons-codec:1.18.0'
+    implementation 'cn.hutool:hutool-core:5.8.25'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
