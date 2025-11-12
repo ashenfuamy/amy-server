@@ -1,0 +1,8 @@
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public/' // 使用阿里云的Maven仓库作为镜像
+        }
+        mavenCentral() // 保持对Maven中央仓库的访问
+    }
+}

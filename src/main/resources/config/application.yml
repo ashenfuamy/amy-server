@@ -1,0 +1,4 @@
+#spring.application.name=amy-server
+spring:
+  application:
+    name: amy-server

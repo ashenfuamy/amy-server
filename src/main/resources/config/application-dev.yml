@@ -1,0 +1,29 @@
+server:
+  port: 8088
+
+
+spring:
+  data:
+    redis:
+      host: 192.168.0.20
+      port: 8898
+      timeout: 5000ms
+      database: 13
+      password: 12345678
+      lettuce:
+        pool:
+          # 最大连接数（默认8）
+          max-active: 8
+          # 最大空闲连接（默认8）
+          max-idle: 8
+          # 最小空闲连接（默认0）
+          min-idle: 2
+          # 最大等待时间（获取连接时的最长等待时间，单位毫秒，-1表示无限制）
+          max-wait: 1000ms
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-cn-lf64is1r90004m1o.rwlb.rds.aliyuncs.com:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+    username: ashen
+    password: Lyuanshen520
+    type: com.mchange.v2.c3p0.ComboPooledDataSource
