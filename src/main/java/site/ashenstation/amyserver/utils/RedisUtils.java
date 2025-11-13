@@ -2,6 +2,8 @@ package site.ashenstation.amyserver.utils;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson2.JSON;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -17,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 @SuppressWarnings({"all"})
 @Slf4j
-@RequiredArgsConstructor
 public class RedisUtils {
 
     private final RedisTemplate<Object, Object> redisTemplate;
