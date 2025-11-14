@@ -1,4 +1,4 @@
-package site.ashenstation.amyserver.config;
+package site.ashenstation.amyserver.config.webconfig;
 
 import com.alibaba.fastjson2.JSONWriter;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;

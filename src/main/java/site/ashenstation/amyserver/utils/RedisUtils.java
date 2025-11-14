@@ -28,6 +28,7 @@ public class RedisUtils {
         this.redisTemplate = redisTemplate;
         this.redisTemplate.setKeySerializer(new StringRedisSerializer());
         this.redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        log.info("RedisUtils initialized");
     }
 
     /**

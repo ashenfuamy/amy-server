@@ -36,6 +36,11 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException ex) {
+        return buildResponseEntity(ApiError.error(ex.getMessage()));
+    }
+
     /**
      * 统一返回
      */

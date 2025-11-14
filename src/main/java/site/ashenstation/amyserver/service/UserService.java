@@ -3,12 +3,16 @@ package site.ashenstation.amyserver.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.ashenstation.amyserver.config.exception.BadRequestException;
 import site.ashenstation.amyserver.dto.RegisterUerDto;
 import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.entity.table.UserPoTableDef;
 import site.ashenstation.amyserver.mapper.UserMapper;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -19,7 +23,7 @@ public class UserService {
     public Boolean register(RegisterUerDto registerUerDto) {
 
         UserPo exist = userMapper.selectOneByQuery(QueryWrapper.create()
-                .select()
+                .select(UserPoTableDef.USER_PO.ID)
                 .where(UserPoTableDef.USER_PO.USERNAME.eq(registerUerDto.getUsername())));
 
         if (exist != null) {
@@ -41,14 +45,22 @@ public class UserService {
             }
         }
 
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
+
         UserPo userPo = new UserPo();
         userPo.setLocked(false);
         userPo.setEnabled(false);
+
         BeanUtils.copyProperties(registerUerDto, userPo);
 
+        userPo.setPassword(passwordEncoder.encode(registerUerDto.getPassword()));
 
         int insert = userMapper.insert(userPo);
 
         return insert == 1;
+    }
+
+    public List<GrantedAuthority> getPermissions(String userId) {
+        return null;
     }
 }

@@ -6,7 +6,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
+import site.ashenstation.amyserver.utils.SpringBeanHolder;
 import site.ashenstation.amyserver.utils.annotation.rest.AnonymousGetMapping;
 
 @SpringBootApplication
@@ -22,6 +24,11 @@ public class AppRunner {
         // 或者在 application.yml 添加文件路径，方便 kill，kill `cat /home/eladmin/app.pid`
         springApplication.addListeners(new ApplicationPidFileWriter());
         springApplication.run(args);
+    }
+
+    @Bean
+    public SpringBeanHolder springContextHolder() {
+        return new SpringBeanHolder();
     }
 
 

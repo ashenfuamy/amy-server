@@ -24,7 +24,7 @@ public class UserPo {
     private Date lastLogin;
     private Boolean locked;
     private Boolean enabled;
-    private Boolean phoneNumber;
+    private String phoneNumber;
 
     @RelationManyToMany(
             joinTable = "sys_user_role",
