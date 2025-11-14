@@ -6,6 +6,7 @@ import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -18,15 +19,15 @@ public class UserPo {
     private String email;
     private String password;
     private String avatarPath;
-    private Long createdAt;
-    private Long updatedAt;
-    private Long lastLogin;
+    private Date createdAt;
+    private Date updatedAt;
+    private Date lastLogin;
     private Boolean locked;
     private Boolean enabled;
     private Boolean phoneNumber;
 
     @RelationManyToMany(
-            joinTable="sys_user_role",
+            joinTable = "sys_user_role",
             selfField = "id",
             joinSelfColumn = "user_id",
             targetField = "id",

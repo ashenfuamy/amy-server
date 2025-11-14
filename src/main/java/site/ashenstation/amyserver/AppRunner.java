@@ -6,11 +6,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
+import org.springframework.web.bind.annotation.RestController;
+import site.ashenstation.amyserver.utils.annotation.rest.AnonymousGetMapping;
 
 @SpringBootApplication
 @Slf4j
 @RequiredArgsConstructor
 @MapperScan("site.ashenstation.amyserver.mapper")
+@RestController
 public class AppRunner {
 
     public static void main(String[] args) {
@@ -21,4 +24,9 @@ public class AppRunner {
         springApplication.run(args);
     }
 
+
+    @AnonymousGetMapping("/")
+    public String index() {
+        return "WELCOME TO AMY APP SERVER";
+    }
 }

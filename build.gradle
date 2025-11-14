@@ -27,10 +27,12 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.mchange:c3p0:0.11.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.mybatis-flex:mybatis-flex-spring-boot3-starter:1.11.3'
     implementation 'com.alibaba.fastjson2:fastjson2:2.0.54'
+    implementation 'com.alibaba.fastjson2:fastjson2-extension-spring5:2.0.54'
     implementation 'commons-codec:commons-codec:1.18.0'
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'cn.hutool:hutool-core:5.8.25'

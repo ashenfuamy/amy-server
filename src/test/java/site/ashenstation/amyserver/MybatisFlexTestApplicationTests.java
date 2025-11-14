@@ -4,18 +4,22 @@ import com.mybatisflex.core.query.QueryWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import site.ashenstation.amyserver.entity.MdaTagPo;
 import site.ashenstation.amyserver.entity.TestPo;
-import site.ashenstation.amyserver.entity.table.MdaTagPoTableDef;
+import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.entity.table.TestPoTableDef;
-import site.ashenstation.amyserver.mapper.MdaTagMapper;
 import site.ashenstation.amyserver.mapper.TestMapper;
+import site.ashenstation.amyserver.mapper.UserMapper;
+
+import java.util.List;
 
 @SpringBootTest
 public class MybatisFlexTestApplicationTests {
 
     @Autowired
     private TestMapper testMapper;
+    @Autowired
+    private UserMapper userMapper;
+
     @Test
     void contextLoads() {
         QueryWrapper where = QueryWrapper.create()
@@ -37,5 +41,12 @@ public class MybatisFlexTestApplicationTests {
         testMapper.insert(testPo);
 
         System.out.println(testPo);
+    }
+
+    @Test
+    void customerQueryGenerator() {
+        List<UserPo> userPos = userMapper.selectAll();
+
+        System.out.println(userPos);
     }
 }
