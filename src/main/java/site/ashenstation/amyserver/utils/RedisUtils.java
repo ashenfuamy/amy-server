@@ -544,6 +544,11 @@ public class RedisUtils {
         }
     }
 
+    public Set<Object> members(String key) {
+        Set<Object> members = redisTemplate.opsForSet().members(key);
+        return members;
+    }
+
     /**
      * 将set数据放入缓存
      *

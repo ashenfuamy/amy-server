@@ -6,13 +6,14 @@ import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @ToString
 @Table("sys_user")
-public class UserPo {
+public class UserPo implements Serializable {
     @Id
     private String id;
     private String username;

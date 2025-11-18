@@ -27,6 +27,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import site.ashenstation.amyserver.config.properties.SecurityProperties;
 import site.ashenstation.amyserver.service.OnlineUserService;
 import site.ashenstation.amyserver.service.UserService;
+import site.ashenstation.amyserver.utils.AnonTagUtils;
 import site.ashenstation.amyserver.utils.TokenProvider;
 import site.ashenstation.amyserver.utils.enums.RequestMethodEnum;
 
@@ -67,7 +68,7 @@ public class SpringSecurityConfig {
 
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        Map<String, Set<String>> anonymousUrls = getAnonymousUrl();
+        Map<String, Set<String>> anonymousUrls = AnonTagUtils.getAnonymousUrl(applicationContext);
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -103,57 +104,5 @@ public class SpringSecurityConfig {
 
     private TokenConfigurer securityConfigurerAdapter() {
         return new TokenConfigurer(tokenProvider,securityProperties, onlineUserService, userService);
-    }
-
-
-    private Map<String, Set<String>> getAnonymousUrl() {
-        RequestMappingHandlerMapping requestMappingHandlerMapping = (RequestMappingHandlerMapping) applicationContext.getBean("requestMappingHandlerMapping");
-        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = requestMappingHandlerMapping.getHandlerMethods();
-
-        Map<String, Set<String>> anonymousUrls = new HashMap<>(8);
-
-        Set<String> get = new HashSet<>();
-        Set<String> post = new HashSet<>();
-        Set<String> put = new HashSet<>();
-        Set<String> patch = new HashSet<>();
-        Set<String> delete = new HashSet<>();
-        Set<String> all = new HashSet<>();
-
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
-            List<RequestMethod> requestMethods = new ArrayList<>(infoEntry.getKey().getMethodsCondition().getMethods());
-            RequestMethodEnum request = RequestMethodEnum.find(requestMethods.isEmpty() ? RequestMethodEnum.ALL.getType() : requestMethods.get(0).name());
-            switch (Objects.requireNonNull(request)) {
-                case GET -> {
-                    get.addAll(infoEntry.getKey().getDirectPaths());
-                }
-                case POST -> {
-                    post.addAll(infoEntry.getKey().getDirectPaths());
-                }
-                case PUT -> {
-                    put.addAll(infoEntry.getKey().getDirectPaths());
-                }
-                case PATCH -> {
-                    patch.addAll(infoEntry.getKey().getDirectPaths());
-                }
-                case DELETE -> {
-                    delete.addAll(infoEntry.getKey().getDirectPaths());
-                }
-                default -> {
-                    all.addAll(infoEntry.getKey().getDirectPaths());
-                }
-            }
-
-
-        }
-
-        anonymousUrls.put(RequestMethodEnum.GET.getType(), get);
-        anonymousUrls.put(RequestMethodEnum.POST.getType(), post);
-        anonymousUrls.put(RequestMethodEnum.PUT.getType(), put);
-        anonymousUrls.put(RequestMethodEnum.PATCH.getType(), patch);
-        anonymousUrls.put(RequestMethodEnum.DELETE.getType(), delete);
-        anonymousUrls.put(RequestMethodEnum.ALL.getType(), all);
-
-
-        return anonymousUrls;
     }
 }

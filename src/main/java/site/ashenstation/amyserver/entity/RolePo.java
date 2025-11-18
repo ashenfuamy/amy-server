@@ -4,6 +4,9 @@ import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
+import site.ashenstation.amyserver.utils.enums.RoleDataScope;
+
+import java.util.Date;
 
 @Data
 @ToString
@@ -13,8 +16,8 @@ public class RolePo {
     private String id;
     private String name;
     private String description;
-    private String enabled;
-    private Long createAt;
-    private Long updateAt;
-    private Long dataScope;
+    private Boolean enabled;
+    private Date createAt;
+    private Date updateAt;
+    private RoleDataScope dataScope;
 }

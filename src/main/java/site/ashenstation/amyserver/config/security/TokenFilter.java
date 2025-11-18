@@ -53,15 +53,13 @@ public class TokenFilter extends GenericFilterBean {
                 tokenProvider.checkRenewal(token);
 
                 Claims claims = tokenProvider.getClaims(token);
-                String userId = claims.get("userId", String.class);
+                String username = claims.get("username", String.class);
 
-                List<GrantedAuthority> permissions = userService.getPermissions(userId);
+                List<GrantedAuthority> permissions = userService.getPermissions(username);
 
                 User principal = new User(claims.getSubject(), "******", permissions);
 
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(principal, token, permissions));
-            } else {
-                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             }
         }
 

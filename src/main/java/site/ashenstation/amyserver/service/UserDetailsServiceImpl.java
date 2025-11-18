@@ -7,9 +7,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import site.ashenstation.amyserver.dto.JwtUserDto;
+import site.ashenstation.amyserver.entity.RolePo;
 import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.entity.table.UserPoTableDef;
 import site.ashenstation.amyserver.mapper.UserMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +34,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                             .where(UserPoTableDef.USER_PO.USERNAME.eq(username))
             );
 
+
             if (user == null) {
                 throw new UsernameNotFoundException(username);
             }
 
             userDto = new JwtUserDto(user);
+
+            userCacheManager.addUserCache(username, userDto);
         }
 
 

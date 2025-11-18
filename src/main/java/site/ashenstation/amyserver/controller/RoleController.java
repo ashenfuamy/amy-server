@@ -4,11 +4,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import site.ashenstation.amyserver.dto.RoleDto;
 import site.ashenstation.amyserver.service.RoleService;
+import site.ashenstation.amyserver.vo.RoleVo;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +21,15 @@ public class RoleController {
     private final RoleService roleService;
 
     @PostMapping("/add")
-    @Operation(summary = "添加用户")
-    public ResponseEntity<Integer> addRole(RoleDto role) {
+    @Operation(summary = "添加角色")
+    public ResponseEntity<Boolean> addRole(@RequestBody @Validated RoleDto role) {
         return ResponseEntity.ok(roleService.addRole(role));
     }
+
+    @GetMapping("/list")
+    @Operation(summary = "获取所有角色")
+    public ResponseEntity<List<RoleVo>> getAllRole() {
+        return ResponseEntity.ok(roleService.getAllRole());
+    }
+
 }
