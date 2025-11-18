@@ -32,19 +32,19 @@ public class GlobalExceptionHandler {
 
         // 打印堆栈信息
 //        log.error(ex.getMessage());
-        return buildResponseEntity(ApiError.error(HttpStatus.BAD_REQUEST, errors.getFirst()));
+        return GlobalExceptionHandler.buildResponseEntity(ApiError.error(HttpStatus.BAD_REQUEST, errors.getFirst()));
 
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<?> handleBadRequestException(BadRequestException ex) {
-        return buildResponseEntity(ApiError.error(ex.getMessage()));
+        return GlobalExceptionHandler.buildResponseEntity(ApiError.error(ex.getMessage()));
     }
 
     /**
      * 统一返回
      */
-    private ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {
+    public static ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }
 }

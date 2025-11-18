@@ -4,12 +4,15 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.List;
 
 @Configuration
+@Slf4j
 public class SwaggerConfig {
     @Value("${server.port:8080}")
     private String serverPort;
@@ -31,6 +34,8 @@ public class SwaggerConfig {
                 .version("1.0.0")
                 .contact(contact)
                 .description("这是基于SpringDoc生成的API接口文档");
+
+        log.info("Swagger Initializing, Doc URL: {}", devServer.getUrl() + "/swagger-ui.html");
 
         return new OpenAPI()
                 .info(info)

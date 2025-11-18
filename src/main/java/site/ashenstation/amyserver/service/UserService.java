@@ -1,6 +1,7 @@
 package site.ashenstation.amyserver.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.util.UpdateEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.entity.table.UserPoTableDef;
 import site.ashenstation.amyserver.mapper.UserMapper;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -58,6 +60,14 @@ public class UserService {
         int insert = userMapper.insert(userPo);
 
         return insert == 1;
+    }
+
+    public void recordLoginDataTime(String currentUserId) {
+
+        UserPo userPo = UpdateEntity.of(UserPo.class, currentUserId);
+
+        userPo.setLastLogin(new Date());
+        userMapper.update(userPo);
     }
 
     public List<GrantedAuthority> getPermissions(String userId) {
