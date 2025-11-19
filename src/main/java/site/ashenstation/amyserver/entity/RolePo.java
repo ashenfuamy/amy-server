@@ -15,6 +15,7 @@ public class RolePo {
     @Id
     private String id;
     private String name;
+    private String code;
     private String description;
     private Boolean enabled;
     private Date createAt;

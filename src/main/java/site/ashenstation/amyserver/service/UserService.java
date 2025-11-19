@@ -1,16 +1,22 @@
 package site.ashenstation.amyserver.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.util.UpdateEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import site.ashenstation.amyserver.config.exception.BadRequestException;
+import site.ashenstation.amyserver.config.properties.FileProperties;
+import site.ashenstation.amyserver.config.properties.SecurityProperties;
 import site.ashenstation.amyserver.dto.RegisterUerDto;
 import site.ashenstation.amyserver.dto.SetUserRolesDto;
+import site.ashenstation.amyserver.dto.UpdateUserDto;
 import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.entity.UserRolePo;
 import site.ashenstation.amyserver.entity.table.UserPoTableDef;
@@ -19,6 +25,7 @@ import site.ashenstation.amyserver.mapper.UserMapper;
 import site.ashenstation.amyserver.mapper.UserRoleMapper;
 import site.ashenstation.amyserver.utils.RedisUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +38,8 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserRoleMapper userRolePoMapper;
     private final RedisUtils redisUtils;
+    private final SecurityProperties securityProperties;
+    private final FileProperties fileProperties;
 
     public Boolean register(RegisterUerDto registerUerDto) {
 
@@ -81,9 +90,30 @@ public class UserService {
     }
 
     public List<GrantedAuthority> getPermissions(String username) {
-        Set<Object> members = redisUtils.members(username);
+        String key = securityProperties.getResourcePermissionKey() + username;
+        Set<Object> members = redisUtils.members(key);
+        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
-        return new ArrayList<>();
+        if (members != null && !members.isEmpty()) {
+            for (Object obj : members) {
+                if (obj instanceof String) {
+                    grantedAuthorities.add(new SimpleGrantedAuthority((String) obj));
+                }
+            }
+        } else {
+            UserPo userPo = userMapper.selectOneWithRelationsByQuery(QueryWrapper.create()
+                    .select(UserPoTableDef.USER_PO.ID)
+                    .where(UserPoTableDef.USER_PO.USERNAME.eq(username))
+            );
+
+            userPo.getRole().forEach(r -> {
+                redisUtils.sSet(key, "ROLE_" + r.getCode());
+                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + r.getCode()));
+            });
+
+        }
+
+        return grantedAuthorities;
     }
 
     @Transactional
@@ -106,4 +136,32 @@ public class UserService {
 
         return true;
     }
+
+    public Boolean setUserInfo(UpdateUserDto userInfo) {
+
+        UserPo userPo = new UserPo();
+        BeanUtils.copyProperties(userInfo, userPo);
+
+        MultipartFile avatarFile = userInfo.getAvatarFile();
+
+        if (avatarFile != null) {
+            String avatarId = IdUtil.fastSimpleUUID();
+            String avatarName = avatarId + fileProperties.getImageExt();
+            File avatarDest = new File(fileProperties.getAvatarRoot(), avatarName);
+
+            try {
+                avatarFile.transferTo(avatarDest);
+            } catch (Exception e) {
+                throw new BadRequestException(e.getMessage());
+            }
+
+            userPo.setAvatarPath(fileProperties.getAvatarResourcePrefix() + "/" + avatarName);
+        }
+
+        userMapper.update(userPo, true);
+
+        return true;
+    }
+
+
 }

@@ -6,28 +6,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.ashenstation.amyserver.config.properties.LoginProperties;
 import site.ashenstation.amyserver.config.properties.RsaProperties;
 import site.ashenstation.amyserver.config.properties.SecurityProperties;
-import site.ashenstation.amyserver.dto.AuthenticationDto;
-import site.ashenstation.amyserver.dto.JwtUserDto;
-import site.ashenstation.amyserver.dto.RegisterUerDto;
-import site.ashenstation.amyserver.dto.SetUserRolesDto;
+import site.ashenstation.amyserver.dto.*;
 import site.ashenstation.amyserver.entity.UserPo;
 import site.ashenstation.amyserver.service.OnlineUserService;
 import site.ashenstation.amyserver.service.UserService;
 import site.ashenstation.amyserver.utils.RsaUtils;
+import site.ashenstation.amyserver.utils.SecurityUtils;
 import site.ashenstation.amyserver.utils.TokenProvider;
 import site.ashenstation.amyserver.utils.annotation.rest.AnonymousPostMapping;
 import site.ashenstation.amyserver.utils.enums.LoginPlatform;
@@ -96,4 +93,27 @@ public class UserController {
     public ResponseEntity<Boolean> setRole(@RequestBody @Validated SetUserRolesDto dto) {
         return ResponseEntity.ok(userService.setUserRoles(dto));
     }
+
+
+    @DeleteMapping(value = "logout")
+    @Operation(summary = "退出登录")
+    public ResponseEntity<Object> logout(HttpServletRequest request) {
+        String token = tokenProvider.resolveToken(request);
+        onlineUserService.logout(token);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "info")
+    @Operation(summary = "获取用户信息")
+    public ResponseEntity<UserDetails> getUserInfo() {
+        return ResponseEntity.ok(SecurityUtils.getCurrentUser());
+    }
+
+
+    @PutMapping("update")
+    @Operation(summary = "更新用户信息")
+    public ResponseEntity<?> updateUserInfo(UpdateUserDto updateUserDto) {
+        return ResponseEntity.ok(userService.setUserInfo(updateUserDto));
+    }
+
 }

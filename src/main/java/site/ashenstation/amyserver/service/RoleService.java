@@ -2,7 +2,6 @@ package site.ashenstation.amyserver.service;
 
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.query.QueryWrapper;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,8 @@ public class RoleService {
         RolePo po = new RolePo();
 
         BeanUtils.copyProperties(roleDto, po);
+        po.setCode(po.getName().toUpperCase());
+
         int insert = roleMapper.insert(po);
 
         return 1 == insert;

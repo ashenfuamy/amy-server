@@ -19,11 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import site.ashenstation.amyserver.config.properties.SecurityProperties;
 import site.ashenstation.amyserver.service.OnlineUserService;
 import site.ashenstation.amyserver.service.UserService;
@@ -31,7 +27,8 @@ import site.ashenstation.amyserver.utils.AnonTagUtils;
 import site.ashenstation.amyserver.utils.TokenProvider;
 import site.ashenstation.amyserver.utils.enums.RequestMethodEnum;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Configuration
@@ -83,6 +80,7 @@ public class SpringSecurityConfig {
                             .requestMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodEnum.PATCH.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodEnum.DELETE.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodEnum.PUT.getType()).toArray(new String[0])).permitAll()
+                            .requestMatchers("/api/role/**").hasRole("ADMIN")
                             .requestMatchers(
                                     "/swagger-ui.html",
                                     "/swagger-ui/**",
@@ -98,11 +96,10 @@ public class SpringSecurityConfig {
                 .with(securityConfigurerAdapter(), Customizer.withDefaults());
 
 
-
         return httpSecurity.build();
     }
 
     private TokenConfigurer securityConfigurerAdapter() {
-        return new TokenConfigurer(tokenProvider,securityProperties, onlineUserService, userService);
+        return new TokenConfigurer(tokenProvider, securityProperties, onlineUserService, userService);
     }
 }
