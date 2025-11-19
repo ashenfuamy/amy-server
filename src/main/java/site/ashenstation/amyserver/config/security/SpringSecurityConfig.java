@@ -80,7 +80,6 @@ public class SpringSecurityConfig {
                             .requestMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodEnum.PATCH.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodEnum.DELETE.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodEnum.PUT.getType()).toArray(new String[0])).permitAll()
-                            .requestMatchers("/api/role/**").hasRole("ADMIN")
                             .requestMatchers(
                                     "/swagger-ui.html",
                                     "/swagger-ui/**",

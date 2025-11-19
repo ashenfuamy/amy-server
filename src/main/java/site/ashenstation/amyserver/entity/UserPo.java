@@ -5,6 +5,7 @@ import com.mybatisflex.annotation.RelationManyToMany;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
+import site.ashenstation.amyserver.utils.enums.UserDataScope;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class UserPo implements Serializable {
     private Boolean locked;
     private Boolean enabled;
     private String phoneNumber;
+    private UserDataScope dataScope;
 
     @RelationManyToMany(
             joinTable = "sys_user_role",

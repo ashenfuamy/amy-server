@@ -1,12 +1,13 @@
 package site.ashenstation.amyserver.entity;
 
 import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.RelationManyToMany;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
-import site.ashenstation.amyserver.utils.enums.RoleDataScope;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ToString
@@ -20,5 +21,13 @@ public class RolePo {
     private Boolean enabled;
     private Date createAt;
     private Date updateAt;
-    private RoleDataScope dataScope;
+
+    @RelationManyToMany(
+            joinTable = "sys_role_permission",
+            selfField = "id",
+            joinSelfColumn = "role_id",
+            targetField = "id",
+            joinTargetColumn = "permission_id"
+    )
+    private List<PermissionPo> permissions;
 }

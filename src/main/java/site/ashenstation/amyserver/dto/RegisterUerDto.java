@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.ToString;
+import site.ashenstation.amyserver.utils.enums.UserDataScope;
 
 @Data
 @ToString
@@ -18,4 +19,5 @@ public class RegisterUerDto {
     private String email;
     @Schema(description = "手机号")
     private String phoneNumber;
+    private UserDataScope dataScope;
 }

@@ -24,6 +24,7 @@ import site.ashenstation.amyserver.entity.table.UserRolePoTableDef;
 import site.ashenstation.amyserver.mapper.UserMapper;
 import site.ashenstation.amyserver.mapper.UserRoleMapper;
 import site.ashenstation.amyserver.utils.RedisUtils;
+import site.ashenstation.amyserver.utils.enums.UserDataScope;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -76,6 +77,10 @@ public class UserService {
 
         userPo.setPassword(passwordEncoder.encode(registerUerDto.getPassword()));
 
+        if (userPo.getDataScope() == null) {
+            userPo.setDataScope(UserDataScope.All);
+        }
+
         int insert = userMapper.insert(userPo);
 
         return insert == 1;
@@ -102,15 +107,24 @@ public class UserService {
             }
         } else {
             UserPo userPo = userMapper.selectOneWithRelationsByQuery(QueryWrapper.create()
-                    .select(UserPoTableDef.USER_PO.ID)
+                    .select(UserPoTableDef.USER_PO.ID, UserPoTableDef.USER_PO.DATA_SCOPE)
                     .where(UserPoTableDef.USER_PO.USERNAME.eq(username))
             );
 
-            userPo.getRole().forEach(r -> {
-                redisUtils.sSet(key, "ROLE_" + r.getCode());
-                grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + r.getCode()));
-            });
+            if (userPo.getDataScope() == UserDataScope.APP || userPo.getDataScope() == UserDataScope.All) {
+                redisUtils.sSet(key, "DATA_SCOPE:" + UserDataScope.APP.getType());
+                grantedAuthorities.add(new SimpleGrantedAuthority("DATA_SCOPE:" + UserDataScope.APP.getType()));
+            }
 
+            if (userPo.getDataScope() == UserDataScope.ADMIN || userPo.getDataScope() == UserDataScope.All) {
+                userPo.getRole().forEach(rolePo -> {
+                    rolePo.getPermissions().forEach(permissionPo -> {
+                        String code = permissionPo.getCode();
+                        redisUtils.sSet(key, code);
+                        grantedAuthorities.add(new SimpleGrantedAuthority(code));
+                    });
+                });
+            }
         }
 
         return grantedAuthorities;

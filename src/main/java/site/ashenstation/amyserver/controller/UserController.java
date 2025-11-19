@@ -45,7 +45,7 @@ public class UserController {
     private final OnlineUserService onlineUserService;
     private final SecurityProperties securityProperties;
 
-    @AnonymousPostMapping("/register")
+    @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册")
     public ResponseEntity<Boolean> register(@RequestBody @Valid RegisterUerDto uerDto) {
         return ResponseEntity.ok(userService.register(uerDto));

@@ -2,10 +2,9 @@ package site.ashenstation.amyserver.utils.enums;
 
 import com.mybatisflex.annotation.EnumValue;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
-public enum RoleDataScope {
+public enum UserDataScope {
     APP("App"),
     ADMIN("Admin"),
     All("All");
@@ -17,8 +16,8 @@ public enum RoleDataScope {
         return type;
     }
 
-    public static RoleDataScope find(String type) {
-        for (RoleDataScope value : RoleDataScope.values()) {
+    public static UserDataScope find(String type) {
+        for (UserDataScope value : UserDataScope.values()) {
             if (value.getType().equals(type)) {
                 return value;
             }
