@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,7 @@ public class UserController {
 
     @PostMapping("/register")
     @Operation(summary = "用户注册", description = "用户注册")
+    @PreAuthorize("hasAuthority('user:register')")
     public ResponseEntity<Boolean> register(@RequestBody @Valid RegisterUerDto uerDto) {
         return ResponseEntity.ok(userService.register(uerDto));
     }
@@ -90,6 +92,7 @@ public class UserController {
 
     @PostMapping(value = "set-role", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "设置用户角色")
+    @PreAuthorize("hasAuthority('user:set-role')")
     public ResponseEntity<Boolean> setRole(@RequestBody @Validated SetUserRolesDto dto) {
         return ResponseEntity.ok(userService.setUserRoles(dto));
     }

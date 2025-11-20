@@ -48,12 +48,14 @@ public class RoleController {
 
     @GetMapping("permissions")
     @Operation(summary = "获取权限列表")
+    @PreAuthorize("hasAuthority('role:permissions-list')")
     public ResponseEntity<List<PermissionVo>> getAllPermissions() {
         return ResponseEntity.ok(roleService.getAllPermissions());
     }
 
     @PostMapping(value = "set-role-permission", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "设置角色权限")
+    @PreAuthorize("hasAuthority('role:set-role-permission')")
     public ResponseEntity<Integer> setRolePermissions(@RequestBody @Validated SetRolePermissionDto dto) {
         return ResponseEntity.ok(roleService.setRolePermissions(dto));
     }

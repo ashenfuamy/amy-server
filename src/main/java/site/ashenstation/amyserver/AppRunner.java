@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 import site.ashenstation.amyserver.utils.SpringBeanHolder;
 import site.ashenstation.amyserver.utils.annotation.rest.AnonymousGetMapping;
@@ -16,6 +17,7 @@ import site.ashenstation.amyserver.utils.annotation.rest.AnonymousGetMapping;
 @RequiredArgsConstructor
 @MapperScan("site.ashenstation.amyserver.mapper")
 @RestController
+@EnableTransactionManagement
 public class AppRunner {
 
     public static void main(String[] args) {
