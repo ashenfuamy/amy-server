@@ -9,25 +9,28 @@ import site.ashenstation.amyserver.config.exception.BadRequestException;
 import site.ashenstation.amyserver.config.properties.FileProperties;
 import site.ashenstation.amyserver.dto.CreateActorDto;
 import site.ashenstation.amyserver.entity.ActorPo;
+import site.ashenstation.amyserver.entity.ActorTagPo;
 import site.ashenstation.amyserver.entity.MdaTagPo;
 import site.ashenstation.amyserver.entity.ResourcePermissionPo;
 import site.ashenstation.amyserver.entity.table.ActorPoTableDef;
 import site.ashenstation.amyserver.mapper.ActorMapper;
+import site.ashenstation.amyserver.mapper.ActorTagMapper;
 import site.ashenstation.amyserver.mapper.MdaTagMapper;
 import site.ashenstation.amyserver.mapper.ResourcePermissionMapper;
 import site.ashenstation.amyserver.utils.SecurityUtils;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ActorService {
 
-    private final MdaTagMapper tagMapper;
     private final ActorMapper actorMapper;
     private final FileProperties fileProperties;
     private final ResourcePermissionMapper resourcePermissionMapper;
+    private final ActorTagMapper actorTagMapper;
 
     @Transactional
     public Boolean createActor(CreateActorDto actorDto) {
@@ -41,10 +44,10 @@ public class ActorService {
             throw new BadRequestException("演员已存在");
         }
 
-        MdaTagPo mdaTagPo = actorDto.getMdaTagPo();
-        if (mdaTagPo.getId() == null) {
-            mdaTagPo.setEnabled(true);
-            tagMapper.insert(mdaTagPo);
+        ActorTagPo tag = actorDto.getTag();
+
+        if (tag.getId() == null) {
+            actorTagMapper.insert(tag);
         }
 
         String avatarId = IdUtil.fastSimpleUUID();
@@ -60,11 +63,13 @@ public class ActorService {
         ActorPo actor = new ActorPo();
         actor.setCreatorId(SecurityUtils.getCurrentUserId());
         actor.setName(actorDto.getName());
-        actor.setTag(mdaTagPo);
+        actor.setTag(tag);
         actor.setIntroduction(actorDto.getIntroduction());
         actor.setCreateTime(new Date());
         actor.setAvatarPath(fileProperties.getAvatarResourcePrefix() + "/" + avatarName);
         actor.setAvatarName(avatarName);
+
+        actor.setTagId(tag.getId());
 
         actorMapper.insert(actor);
 
@@ -72,5 +77,14 @@ public class ActorService {
 
         resourcePermissionMapper.insert(resourcePermissionPo);
         return true;
+    }
+
+
+    public List<ActorTagPo> getTags() {
+        return actorTagMapper.selectAll();
+    }
+
+    public List<ActorPo> getActors() {
+        return actorMapper.selectAllWithRelations();
     }
 }

@@ -1,5 +1,6 @@
 package site.ashenstation.amyserver.entity;
 
+import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.Date;
 @Table("mda_resource_permission")
 @NoArgsConstructor
 public class ResourcePermissionPo {
+    @Id
     private String id;
     private String userId;
     private String resourceId;

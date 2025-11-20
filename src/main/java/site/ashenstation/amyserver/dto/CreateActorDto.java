@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
+import site.ashenstation.amyserver.entity.ActorTagPo;
 import site.ashenstation.amyserver.entity.MdaTagPo;
 
 @Data
@@ -16,5 +17,5 @@ public class CreateActorDto {
     private MultipartFile avatarFile;
     private String introduction;
     @NotNull(message = "演员标签不能为空")
-    private MdaTagPo mdaTagPo;
+    private ActorTagPo tag;
 }
