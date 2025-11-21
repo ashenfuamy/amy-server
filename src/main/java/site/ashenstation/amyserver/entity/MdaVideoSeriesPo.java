@@ -1,5 +1,6 @@
 package site.ashenstation.amyserver.entity;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.RelationOneToOne;
 import com.mybatisflex.annotation.Table;
@@ -12,7 +13,9 @@ import lombok.ToString;
 public class MdaVideoSeriesPo {
     @Id
     private String id;
+    @Column("summary_id")
     private String summaryId;
+    @Column("publisher_id")
     private String publisherId;
 
     @RelationOneToOne(targetField = "id", selfField = "summaryId")

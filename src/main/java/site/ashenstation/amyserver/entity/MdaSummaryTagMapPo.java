@@ -7,10 +7,10 @@ import lombok.ToString;
 
 @Data
 @ToString
-@Table("mda_video_tag")
-public class MdaVideoTagMapPo {
+@Table("mda_summary_tag")
+public class MdaSummaryTagMapPo {
     @Id
     private String id;
-    private String videoId;
+    private String summaryId;
     private String tagId;
 }
