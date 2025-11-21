@@ -17,6 +17,7 @@ import site.ashenstation.amyserver.mapper.*;
 import site.ashenstation.amyserver.utils.enums.MdaSummaryType;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +30,7 @@ public class MdaVideoService {
     private final MdaActorSummaryMapMapper actorSummaryMapMapper;
     private final FileProperties fileProperties;
     private final MdaVideoSeriesMapper videoSeriesMapper;
+    private final MdaSummaryTagMapMapper summaryTagMapMapper;
 
     public List<MdaPublisherPo> getMdaPublishers() {
         return publisherMapper.selectAll();
@@ -72,7 +74,10 @@ public class MdaVideoService {
         }
 
         seriesDto.getTags().forEach(mdaTagPo -> {
-            
+            if (mdaTagPo.getId() == null) {
+                mdaTagPo.setEnabled(true);
+                tagMapper.insert(mdaTagPo);
+            }
         });
 
 
@@ -93,5 +98,17 @@ public class MdaVideoService {
         mdaVideoSeriesPo.setSummaryId(msPo.getId());
 
         videoSeriesMapper.insert(mdaVideoSeriesPo);
+
+        ArrayList<MdaSummaryTagMapPo> mdaSummaryTagMapPos = new ArrayList<>();
+
+        seriesDto.getTags().forEach(mdaTagPo -> {
+            MdaSummaryTagMapPo mdaSummaryTagMapPo = new MdaSummaryTagMapPo();
+            mdaSummaryTagMapPo.setTagId(mdaTagPo.getId());
+            mdaSummaryTagMapPo.setSummaryId(msPo.getId());
+            mdaSummaryTagMapPos.add(mdaSummaryTagMapPo);
+        });
+
+        summaryTagMapMapper.insertBatch(mdaSummaryTagMapPos);
+
     }
 }
