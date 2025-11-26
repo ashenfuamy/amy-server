@@ -13,6 +13,5 @@ public class PublishArchiveService {
 
     @PostConstruct
     private void c() {
-        System.out.println(archiveRepositoryProperties.getArchiveRoot().get(0).getName().getType());
     }
 }
