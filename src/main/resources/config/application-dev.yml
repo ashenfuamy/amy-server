@@ -61,3 +61,7 @@ ffmpeg:
 
 login:
   single-login: true
+
+archive-repo:
+  archive-root:
+    - { name: AMY }
