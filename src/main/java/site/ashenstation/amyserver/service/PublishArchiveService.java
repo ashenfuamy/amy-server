@@ -13,5 +13,6 @@ public class PublishArchiveService {
 
     @PostConstruct
     private void c() {
+        System.out.println(archiveRepositoryProperties);
     }
 }
