@@ -63,5 +63,5 @@ login:
   single-login: true
 
 archive-repo:
-  amy-archive:
-    path: E:\workspace
+  amy-archive-directory: amy
+  root: D:\amy\resource\archive
