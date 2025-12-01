@@ -18,6 +18,8 @@ public class ArchivePo {
     private String version;
     private String directoryPath;
     private String describe;
+    private String platform;
+    private String arch;
     private Date publishTime;
     private ArchiveStatus status;
     private Boolean isLatest;

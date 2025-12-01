@@ -63,8 +63,6 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
 
         String archive = "file:" + amyDirectory.getAbsolutePath().replace("\\", "/") + "/";
 
-        System.out.println(archive);
-
-        registry.addResourceHandler("/static/arch/**").addResourceLocations("file:C:/Users/shen/Documents/AMY/resource/archive/amy/");
+        registry.addResourceHandler("/static/arch/**").addResourceLocations(archive);
     }
 }

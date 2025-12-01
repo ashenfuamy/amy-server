@@ -15,7 +15,9 @@ import java.io.FileNotFoundException;
 @ConfigurationProperties(prefix = "archive-repo")
 public class ArchiveRepositoryProperties {
     private String root;
+    private String uriPath;
     private String amyArchiveDirectory;
+
 
     @PostConstruct
     public void afterPropertiesSet() throws FileNotFoundException {
