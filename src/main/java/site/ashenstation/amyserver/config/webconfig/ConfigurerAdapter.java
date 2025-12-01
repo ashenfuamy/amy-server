@@ -12,8 +12,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import site.ashenstation.amyserver.config.properties.ArchiveRepositoryProperties;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,8 @@ import java.util.List;
 @EnableWebMvc
 @RequiredArgsConstructor
 public class ConfigurerAdapter implements WebMvcConfigurer {
+
+    private final ArchiveRepositoryProperties archiveRepositoryProperties;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -49,5 +54,17 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
         converter.setSupportedMediaTypes(supportMediaTypeList);
         converter.setDefaultCharset(StandardCharsets.UTF_8);
         converters.add(converter);
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
+        File amyDirectory = new File(archiveRepositoryProperties.getRoot(), archiveRepositoryProperties.getAmyArchiveDirectory());
+
+        String archive = "file:" + amyDirectory.getAbsolutePath().replace("\\", "/") + "/";
+
+        System.out.println(archive);
+
+        registry.addResourceHandler("/static/arch/**").addResourceLocations("file:C:/Users/shen/Documents/AMY/resource/archive/amy/");
     }
 }

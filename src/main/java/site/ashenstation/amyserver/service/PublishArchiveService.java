@@ -13,6 +13,7 @@ import site.ashenstation.amyserver.utils.enums.ArchiveStatus;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class PublishArchiveService {
     private final ArchiveMapper archiveMapper;
 
     public Boolean publish(PublishArchiveDto dto) {
+        System.out.println(dto);
         File archiveFoot = null;
 
         if (dto.getName().equals("amy")) {
@@ -43,8 +45,8 @@ public class PublishArchiveService {
             versionRoot.mkdir();
 
             List<MultipartFile> files = dto.getFiles();
-            for (MultipartFile f: files) {
-                File file = new File(versionRoot, f.getOriginalFilename());
+            for (MultipartFile f : files) {
+                File file = new File(versionRoot, Objects.requireNonNull(f.getOriginalFilename()));
                 f.transferTo(file);
             }
 
@@ -63,6 +65,7 @@ public class PublishArchiveService {
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             versionRoot.deleteOnExit();
             throw new BadRequestException(e.getMessage());
         }

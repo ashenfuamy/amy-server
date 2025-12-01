@@ -85,7 +85,9 @@ public class SpringSecurityConfig {
                                     "/swagger-ui/**",
                                     "/v3/api-docs/**",
                                     "/swagger-resources/**",
-                                    "/webjars/**"
+                                    "/webjars/**",
+                                    "/amy/**",
+                                    "/static/**"
                             ).permitAll()
 //                            .requestMatchers(HttpMethod.GET, "/resource/avatar/**").access(jwtAuthorizationManager)
 //                            .requestMatchers(HttpMethod.GET, "/resource/poster/**").access(jwtAuthorizationManager)

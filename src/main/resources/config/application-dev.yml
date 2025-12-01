@@ -46,7 +46,7 @@ file:
   poster-root: E:\workspace\amy\resource\poster
   image-ext: .webp
   avatar-resource-prefix: /resource/avatar
-  avatar-root: D:\amy\resource\avatar
+  avatar-root: C:\Users\shen\Documents\AMY\resource\avatar
   poster-resource-prefix: /resource/poster
   video-resource-prefix: /resource/video
   video-roots:
@@ -64,4 +64,4 @@ login:
 
 archive-repo:
   amy-archive-directory: amy
-  root: D:\amy\resource\archive
+  root: C:\Users\shen\Documents\AMY\resource\archive
