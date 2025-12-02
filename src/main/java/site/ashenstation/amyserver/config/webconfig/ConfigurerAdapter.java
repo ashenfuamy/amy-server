@@ -59,10 +59,8 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-        File amyDirectory = new File(archiveRepositoryProperties.getRoot(), archiveRepositoryProperties.getAmyArchiveDirectory());
+        String archive = "file:" + archiveRepositoryProperties.getRoot().replace("\\", "/") + "/";
 
-        String archive = "file:" + amyDirectory.getAbsolutePath().replace("\\", "/") + "/";
-
-        registry.addResourceHandler("/static/arch/**").addResourceLocations(archive);
+        registry.addResourceHandler(archiveRepositoryProperties.getUriPath() + "/**").addResourceLocations(archive);
     }
 }

@@ -129,7 +129,7 @@ public class ArchiveService {
             throw new BadRequestException("版本不存在");
         }
 
-        return archiveRepositoryProperties.getAmyArchiveDirectory()
+        return archiveRepositoryProperties.getUriPath()
                 + "/"
                 + archivePo.getName()
                  + "/"
