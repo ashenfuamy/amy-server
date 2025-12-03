@@ -40,8 +40,19 @@ jobs:
     - name: Build with Gradle Wrapper
       run: ./gradlew bootJar
 
-    - name: Show File
-      run: ll
+    - name: docker login
+      uses: docker/login-action@v3.3.0
+      with:
+        registry: registry.cn-hangzhou.aliyuncs.com
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_PASSWORD}}
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v6.5.0
+      with:
+        context: .
+        push: true
+        tags: registry.cn-hangzhou.aliyuncs.com/amy_station/amy-server:latest
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
