@@ -54,7 +54,7 @@ dependencies {
 }
 
 test {
-    systemProperty "spring.profiles.active", "dev"
+    systemProperty "spring.profiles.active", "cp"
 }
 
 tasks.named('test') {
