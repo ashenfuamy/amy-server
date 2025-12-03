@@ -3,13 +3,10 @@ LABEL authors="ashen"
 
 COPY build/libs/*.jar /app.jar
 
-RUN mkdir /amy \
-    mkdir /amy/poster \
-    mkdir /amy/video_1 \
-    mkdir /amy/archive
+RUN mkdir /amy
+RUN mkdir /amy/poster /amy/avatar /amy/archive /amy/video_1
 
 ENV TZ=Asia/Shanghai
-
 
 EXPOSE 8081
 
