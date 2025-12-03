@@ -27,11 +27,22 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
     implementation 'com.mchange:c3p0:0.11.2'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'com.mybatis-flex:mybatis-flex-spring-boot3-starter:1.11.3'
     implementation 'com.alibaba.fastjson2:fastjson2:2.0.54'
+    implementation 'com.alibaba.fastjson2:fastjson2-extension-spring5:2.0.54'
     implementation 'commons-codec:commons-codec:1.18.0'
+    implementation 'com.google.guava:guava:33.5.0-jre'
+    implementation 'cn.hutool:hutool-core:5.8.25'
+    implementation 'cn.hutool:hutool-jwt:5.8.25'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'net.dreamlu:mica-ip2region:2.7.18.9'
     testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
@@ -43,7 +54,7 @@ dependencies {
 }
 
 test {
-    systemProperty "spring.profiles.active", "dev"
+    systemProperty "spring.profiles.active", "cp"
 }
 
 tasks.named('test') {
