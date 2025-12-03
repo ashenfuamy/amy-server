@@ -14,3 +14,17 @@ rsa:
 
 archive-repo:
   uri-path: /static/arch
+
+jwt:
+  client-header: XPLATFORM
+  header: Authorization
+  token-start-with: Bearer
+  online-key: "app_online_token:"
+  resource-permission-key: "resources_permission:"
+
+file:
+  avatar-resource-prefix: /resource/avatar
+  image-ext: .webp
+  poster-resource-prefix: /resource/poster
+  video-resource-prefix: /resource/video
+  upload-cache-key: 'upload-file:'
