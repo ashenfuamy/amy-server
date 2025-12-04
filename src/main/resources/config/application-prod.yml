@@ -23,8 +23,8 @@ spring:
     type: com.mchange.v2.c3p0.ComboPooledDataSource
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://192.168.31.113:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
-    username: ashen
-    password: Lyuanshen520
+    username: amy
+    password: B9FEJ4OlMmnoBPYd
 
 jwt:
   # 必须使用最少88位的Base64对该令牌进行编码
