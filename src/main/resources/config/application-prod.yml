@@ -21,7 +21,7 @@ spring:
 
   datasource:
     type: com.mchange.v2.c3p0.ComboPooledDataSource
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mysql://192.168.31.113:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
     username: ashen
     password: Lyuanshen520

@@ -20,10 +20,10 @@ spring:
           max-wait: 1000ms
 
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://rm-cn-lf64is1r90004m1o.rwlb.rds.aliyuncs.com:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
-    username: ashen
-    password: Lyuanshen520
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://47.112.7.167:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: amy_123456
     type: com.mchange.v2.c3p0.ComboPooledDataSource
 
 jwt:
