@@ -1,4 +1,4 @@
-FROM registry.cn-hangzhou.aliyuncs.com/zxhysite/jdk17-ffpmeg:latest
+FROM eclipse-temurin:21.0.9_10-jdk-ubi9-minimal
 LABEL authors="ashen"
 
 COPY build/libs/*.jar /app.jar
