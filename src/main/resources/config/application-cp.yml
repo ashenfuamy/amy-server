@@ -44,15 +44,12 @@ jwt:
 
 file:
   poster-root: D:\amy\resource\poster
-  image-ext: .webp
-  avatar-resource-prefix: /resource/avatar
   avatar-root: D:\amy\resource\avatar
-  poster-resource-prefix: /resource/poster
-  video-resource-prefix: /resource/video
   video-roots:
     - { name: 'base', order: 1, path: D:\amy\resource\video }
   enable-video-root: base
   upload-cache-key: 'upload-file:'
+  publish-resource-root: D:\amy\resource\publish
 
 
 ffmpeg:

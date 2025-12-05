@@ -39,6 +39,7 @@ jwt:
 file:
   poster-root: E:\workspace\amy\resource\poster
   avatar-root: C:\Users\shen\Documents\AMY\resource\avatar
+  publish-resource-root: C:\Users\shen\Documents\AMY\resource\publish
   video-roots:
     - { name: 'base', order: 1, path: E:\workspace\amy\resource\video }
   enable-video-root: base

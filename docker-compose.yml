@@ -2,10 +2,11 @@ version: '3.8'
 services:
   server:
     image: amy-server:latest
-    ports:
-      - "8081:8081"
+    network_mode: host
     volumes:
       - /volume2/amy_resource/archive:/amy/archive
       - /volume2/amy_resource/poster:/amy/poster
       - /volume2/amy_resource/avatar:/amy/avatar
       - /volume2/amy_resource/video:/amy/video_1
+    environment:
+      TZ: Asia/Shanghai

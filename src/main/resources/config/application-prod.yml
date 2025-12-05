@@ -1,6 +1,9 @@
 server:
   port: 8081
 
+sql:
+  logging: false
+
 spring:
   data:
     redis:
@@ -43,6 +46,7 @@ file:
   enable-video-root: base
   video-roots:
     - { name: 'base', order: 1, path: /amy/video_1 }
+  publish-resource-root: /amy/public
 
 ffmpeg:
   ffmpeg-executor-path: ffmpeg

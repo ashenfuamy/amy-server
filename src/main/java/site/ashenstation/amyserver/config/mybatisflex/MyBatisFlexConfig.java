@@ -6,6 +6,8 @@ import com.mybatisflex.core.keygen.KeyGeneratorFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -14,6 +16,9 @@ import org.springframework.context.annotation.Configuration;
 public class MyBatisFlexConfig {
 
     private final SimpleUUIDKeyGenerator simpleUUIDKeyGenerator;
+
+    @Value("${sql.logging}")
+    private Boolean logging;
 
     @PostConstruct
     public void registerKeyGenerator() {
@@ -28,12 +33,16 @@ public class MyBatisFlexConfig {
 
         FlexGlobalConfig.getDefaultConfig().setKeyConfig(keyConfig);
 
-        //开启审计功能
-        AuditManager.setAuditEnable(true);
-        //设置 SQL 审计收集器
-        AuditManager.setMessageCollector(auditMessage ->
-                log.info("{},{}ms", auditMessage.getFullSql()
-                        , auditMessage.getElapsedTime())
-        );
+        if (logging) {
+            //开启审计功能
+            AuditManager.setAuditEnable(true);
+            //设置 SQL 审计收集器
+
+            AuditManager.setMessageCollector(auditMessage ->
+                    log.info("{},{}ms", auditMessage.getFullSql()
+                            , auditMessage.getElapsedTime())
+            );
+        }
+
     }
 }

@@ -4,7 +4,7 @@ LABEL authors="ashen"
 COPY build/libs/*.jar /app.jar
 
 RUN mkdir /amy
-RUN mkdir /amy/poster /amy/avatar /amy/archive /amy/video_1
+RUN mkdir /amy/poster /amy/avatar /amy/archive /amy/video_1 /amy/public
 
 ENV TZ=Asia/Shanghai
 

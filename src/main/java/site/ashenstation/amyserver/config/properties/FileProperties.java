@@ -12,6 +12,7 @@ import java.util.List;
 public class FileProperties {
     private String avatarRoot;
     private String posterRoot;
+    private String publishResourceRoot;
     private List<VideoRootProperties> videoRoots;
 
     private String imageExt;
@@ -21,6 +22,7 @@ public class FileProperties {
     private String avatarResourcePrefix;
     private String posterResourcePrefix;
     private String videoResourcePrefix;
+    private String publishResourcePrefix;
 
     public String getVideoRoot() {
         for (VideoRootProperties videoRoot : videoRoots) {
