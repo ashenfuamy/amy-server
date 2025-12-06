@@ -1,7 +1,7 @@
 FROM eclipse-temurin:21.0.9_10-jdk-ubi9-minimal
 LABEL authors="ashen"
 
-COPY build/libs/*.jar /app.jar
+COPY build/libs/amy-server-0.0.0.jar /app.jar
 
 RUN mkdir /amy
 RUN mkdir /amy/poster /amy/avatar /amy/archive /amy/video_1 /amy/public

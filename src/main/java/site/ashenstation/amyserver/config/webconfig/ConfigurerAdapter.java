@@ -15,8 +15,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import site.ashenstation.amyserver.config.properties.ArchiveRepositoryProperties;
+import site.ashenstation.amyserver.config.properties.FileProperties;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.List;
 public class ConfigurerAdapter implements WebMvcConfigurer {
 
     private final ArchiveRepositoryProperties archiveRepositoryProperties;
+    private final FileProperties fileProperties;
 
     @Bean
     public CorsFilter corsFilter() {
@@ -60,7 +61,9 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
         String archive = "file:" + archiveRepositoryProperties.getRoot().replace("\\", "/") + "/";
+        String publicResource = "file:" + fileProperties.getPublishResourceRoot().replace("\\", "/") + "/";
 
         registry.addResourceHandler(archiveRepositoryProperties.getUriPath() + "/**").addResourceLocations(archive);
+        registry.addResourceHandler(fileProperties.getPublishResourcePrefix() + "/**").addResourceLocations(publicResource);
     }
 }
