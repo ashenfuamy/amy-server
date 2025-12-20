@@ -1,0 +1,6 @@
+rootProject.name = 'amy-server'
+include 'amy-common'
+include 'amy-app'
+include 'amy-admin'
+include 'amy-repository'
+
