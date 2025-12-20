@@ -59,15 +59,15 @@ public class TokenProvider implements InitializingBean {
      *
      * @param subject subject
      * @param claims  claims
-     * @param expired 过期时间 分钟
+     * @param expired 过期时间毫秒
      * @return token
      */
-    public String createToken(String subject, Map<String, String> claims, Integer expired) {
+    public String createToken(String subject, Map<String, String> claims, Long expired) {
         return jwtBuilder
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expired * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + expired))
                 .compact();
     }
 

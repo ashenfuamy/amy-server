@@ -30,7 +30,7 @@ import java.util.Map;
 @EnableCaching
 @AutoConfigureBefore(RedisAutoConfiguration.class)
 public class RedisConfiguration implements CachingConfigurer {
-    private static final String[] WHITELIST_STR = {"site.ashenstation.amyserver" };
+    private static final String[] WHITELIST_STR = {"site.ashenstation" };
 
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration(){

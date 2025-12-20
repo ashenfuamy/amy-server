@@ -1,5 +1,6 @@
 package site.ashenstation.modules.security.service;
 
+import com.mybatisflex.core.mask.MaskManager;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +23,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         JwtUserDto userDto = userCacheManager.getUserCache(username);
 
         if (userDto == null) {
-            Admin admin = adminMapper.selectOneByQuery(
+            Admin admin = MaskManager.execWithoutMask(() -> adminMapper.selectOneByQuery(
                     QueryWrapper.create()
                             .select()
                             .where(AdminTableDef.ADMIN.USERNAME.eq(username))
-            );
+            ));
 
             if (admin == null) {
                 throw new UsernameNotFoundException(username);

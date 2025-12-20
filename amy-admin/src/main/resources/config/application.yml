@@ -18,3 +18,12 @@ jwt:
   token-start-with: Bearer
   online-key: "app_online_token:"
   resource-permission-key: "resources_permission:"
+
+swagger:
+  title: AMY ADMIN
+  description: AMY 后台接口文档
+  version: v1.0.0
+  contact:
+    name: ashen
+    url: https://github.com/ashenfuamy
+    email: ayuanshen。liu@gmail.com

@@ -74,7 +74,7 @@ public class SecurityUtils {
      */
     public static String getCurrentUserId(String token) {
         JWT jwt = JWTUtil.parseToken(token);
-        return jwt.getPayload("userId").toString();
+        return jwt.getPayload(AmyConstants.JWT_CLAIM_USER_ID).toString();
     }
 
     /**

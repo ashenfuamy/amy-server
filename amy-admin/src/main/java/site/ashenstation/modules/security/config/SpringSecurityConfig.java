@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,7 +22,10 @@ import org.springframework.web.filter.CorsFilter;
 import site.ashenstation.config.security.JwtAccessDeniedHandler;
 import site.ashenstation.config.security.JwtAuthenticationEntryPoint;
 import site.ashenstation.enums.RequestMethodEnum;
+import site.ashenstation.modules.security.service.AdminService;
+import site.ashenstation.properties.SecurityProperties;
 import site.ashenstation.utils.AnonTagUtils;
+import site.ashenstation.utils.TokenProvider;
 
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +40,8 @@ public class SpringSecurityConfig {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final CorsFilter corsFilter;
+    private final TokenProvider tokenProvider;
+    private final SecurityProperties securityProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -65,9 +71,22 @@ public class SpringSecurityConfig {
                             .requestMatchers(HttpMethod.PATCH, anonymousUrls.get(RequestMethodEnum.PATCH.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.DELETE, anonymousUrls.get(RequestMethodEnum.DELETE.getType()).toArray(new String[0])).permitAll()
                             .requestMatchers(HttpMethod.PUT, anonymousUrls.get(RequestMethodEnum.PUT.getType()).toArray(new String[0])).permitAll()
+                            .requestMatchers(
+                                    "/swagger-ui.html",
+                                    "/swagger-ui/**",
+                                    "/v3/api-docs/**",
+                                    "/swagger-resources/**",
+                                    "/webjars/**",
+                                    "/amy/version/**",
+                                    "/static/arch/**"
+                            ).permitAll()
                             .anyRequest().authenticated();
-                });
+                }).with(securityConfigurerAdapter(), Customizer.withDefaults());
 
         return httpSecurity.build();
+    }
+
+    private TokenConfigurer securityConfigurerAdapter() {
+        return new TokenConfigurer(tokenProvider, securityProperties);
     }
 }
