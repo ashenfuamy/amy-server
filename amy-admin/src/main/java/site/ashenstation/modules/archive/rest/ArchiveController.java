@@ -2,17 +2,20 @@ package site.ashenstation.modules.archive.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import site.ashenstation.annotation.rest.AnonymousPostMapping;
 import site.ashenstation.modules.archive.dto.PublishArchiveDto;
 import site.ashenstation.modules.archive.dto.SetArchiveLatestDto;
 import site.ashenstation.modules.archive.service.AmyArchiveService;
 import site.ashenstation.modules.archive.vo.ArchiveVo;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -48,5 +51,13 @@ public class ArchiveController {
     @PreAuthorize("hasAuthority('archive:set-latest-version')")
     public ResponseEntity<Boolean> setLatestVersion(SetArchiveLatestDto dto) {
         return ResponseEntity.ok(amyArchiveService.setLatest(dto));
+    }
+
+    @GetMapping("/amy/version/{platform}/{_arch}/{archive}")
+    @Operation(summary = "获取最新版本路径")
+//    @PreAuthorize("hasAuthority('archive:update')")
+    public void archivePath(@PathVariable String platform, @PathVariable String _arch, @PathVariable String archive, HttpServletResponse response) throws IOException{
+        String amy = amyArchiveService.getLatestArchivePath(platform, _arch, "amy", archive);
+        response.sendRedirect(amy);
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,6 +35,11 @@ public class GlobalExceptionHandler {
 //        log.error(ex.getMessage());
         return GlobalExceptionHandler.buildResponseEntity(ApiError.error(HttpStatus.BAD_REQUEST, errors.getFirst()));
 
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException e) {
+        return GlobalExceptionHandler.buildResponseEntity(ApiError.error(e.getMessage()));
     }
 
     @ExceptionHandler(BadRequestException.class)

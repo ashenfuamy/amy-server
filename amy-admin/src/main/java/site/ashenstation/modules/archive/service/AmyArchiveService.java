@@ -135,4 +135,29 @@ public class AmyArchiveService {
 
         return true;
     }
+
+    public String getLatestArchivePath(String platform, String arch, String appName, String archive) {
+        Archive latestArchive = archiveMapper.selectOneByCondition(
+                ArchiveTableDef.ARCHIVE.NAME.eq(appName)
+                        .and(ArchiveTableDef.ARCHIVE.PLATFORM.eq(platform))
+                        .and(ArchiveTableDef.ARCHIVE.ARCH.eq(arch))
+                        .and(ArchiveTableDef.ARCHIVE.IS_LATEST.eq(true))
+        );
+
+        if (latestArchive == null) {
+            throw new BadRequestException("版本不存在");
+        }
+
+        return archiveRepositoryProperties.getUriPath()
+                + "/"
+                + latestArchive.getName()
+                + "/"
+                + latestArchive.getPlatform()
+                + "/"
+                + latestArchive.getArch()
+                + "/"
+                + latestArchive.getVersion()
+                + "/"
+                + archive;
+    }
 }
