@@ -8,25 +8,35 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import site.ashenstation.entity.Admin;
+import site.ashenstation.entity.AdminPermission;
+import site.ashenstation.entity.CustomToken;
 import site.ashenstation.entity.Permission;
-import site.ashenstation.entity.table.AdminTableDef;
+import site.ashenstation.entity.table.AdminPermissionTableDef;
+import site.ashenstation.entity.table.PermissionTableDef;
 import site.ashenstation.enums.JwtTokenType;
+import site.ashenstation.exception.BadRequestException;
 import site.ashenstation.mapper.AdminMapper;
+import site.ashenstation.mapper.AdminPermissionMapper;
+import site.ashenstation.mapper.CustomTokenMapper;
 import site.ashenstation.mapper.PermissionMapper;
-import site.ashenstation.modules.security.dto.AuthenticationDto;
-import site.ashenstation.modules.security.dto.JwtUserDto;
+import site.ashenstation.modules.security.dto.*;
 import site.ashenstation.modules.security.vo.AdminInfoVo;
 import site.ashenstation.modules.security.vo.AuthResVo;
 import site.ashenstation.properties.RsaProperties;
 import site.ashenstation.properties.SecurityProperties;
-import site.ashenstation.utils.*;
+import site.ashenstation.utils.AmyConstants;
+import site.ashenstation.utils.RsaUtils;
+import site.ashenstation.utils.SecurityUtils;
+import site.ashenstation.utils.TokenProvider;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +46,9 @@ public class AdminService {
     private final TokenProvider tokenProvider;
     private final SecurityProperties securityProperties;
     private final AdminMapper adminMapper;
-    private final RedisUtils redisUtils;
     private final PermissionMapper permissionMapper;
+    private final AdminPermissionMapper adminPermissionMapper;
+    private final CustomTokenMapper customTokenMapper;
 
     public AuthResVo loginWithUsernamePassword(AuthenticationDto dto) throws Exception {
         String password = RsaUtils.decryptByPrivateKey(RsaProperties.privateKey, dto.getPassword());
@@ -80,32 +91,88 @@ public class AdminService {
         return adminInfoVo;
     }
 
-    public List<GrantedAuthority> getPermissions(String username) {
-        String key = securityProperties.getResourcePermissionKey() + username;
-        Set<Object> members = redisUtils.members(key);
+    @Transactional(rollbackFor = Exception.class)
+    public Integer addPermission(PermissionDto dto) {
+        Permission permission = permissionMapper.selectOneByQuery(
+                QueryWrapper.create()
+                        .select(PermissionTableDef.PERMISSION.ID)
+                        .where(PermissionTableDef.PERMISSION.CODE.eq(dto.getCode()))
+                        .and(PermissionTableDef.PERMISSION.FIELD.eq(dto.getField()))
+        );
 
-        ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        if (members != null && !members.isEmpty()) {
-            for (Object obj : members) {
-                if (obj instanceof String) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority((String) obj));
-                }
-            }
-
-            return grantedAuthorities;
+        if (permission != null) {
+            throw new BadRequestException("权限已存在");
         }
 
-        Admin admin
-                = adminMapper.selectOneWithRelationsByQuery(QueryWrapper.create().select().where(AdminTableDef.ADMIN.USERNAME.eq(username)));
+        Permission permission1 = new Permission();
+        BeanUtils.copyProperties(dto, permission1);
 
-        List<Permission> permissions = admin.getPermissions();
+        int insert = permissionMapper.insert(permission1);
+
+        AdminPermission adminPermission = new AdminPermission();
+        adminPermission.setPermissionId(permission1.getId());
+        adminPermission.setAdminId(1);
+
+        adminPermissionMapper.insert(adminPermission);
+
+        return insert;
+    }
+
+    @Transactional
+    public Integer setPermission(SetPermissionDto dto) {
+        Integer adminId = dto.getAdminId();
+
+        adminPermissionMapper.deleteByCondition(AdminPermissionTableDef.ADMIN_PERMISSION.ADMIN_ID.eq(adminId));
+
+        ArrayList<AdminPermission> adminPermissions = new ArrayList<>();
+        for (Integer permission : dto.getPermissions()) {
+            adminPermissions.add(new AdminPermission(permission, adminId));
+        }
+
+        return adminPermissionMapper.insertBatch(adminPermissions);
+
+    }
+
+    @Transactional
+    public String generateToken(GenerateTokenDto dto) {
+        Integer expire = dto.getExpire();
+
+        List<Integer> permissions = dto.getPermissions();
+        ArrayList<String> list = new ArrayList<>();
+
         permissions.forEach(c -> {
-            String p = c.getField() + ":" + c.getCode();
-            redisUtils.sSet(key, p);
-            grantedAuthorities.add(new SimpleGrantedAuthority(p));
+            Permission permission = permissionMapper.selectOneById(c);
+
+            if (permission == null) {
+                throw new BadRequestException("权限不存在");
+            }
+
+            list.add(permission.getField() + ":" + permission.getCode());
         });
 
-        return grantedAuthorities;
+        String permission = String.join(",", list);
+
+        HashMap<String, String> claims = new HashMap<>();
+
+        String uid = IdUtil.fastUUID();
+
+        claims.put(AmyConstants.JWT_CLAIM_PERMISSION, permission);
+        claims.put(AmyConstants.JWT_CLAIM_TOKEN_TYPE, JwtTokenType.Authorization.getType());
+        claims.put(AmyConstants.JWT_CLAIM_UID, uid);
+
+        String token = tokenProvider.createToken("anonymous", claims, (long) (expire * 60 * 1000));
+
+        CustomToken customToken = new CustomToken();
+        customToken.setToken(token);
+        customToken.setCreateTime(new Date());
+        customToken.setTitle(dto.getTitle());
+        customToken.setCreator(Integer.valueOf(SecurityUtils.getCurrentUserId()));
+        customToken.setUid(uid);
+
+        customTokenMapper.insert(customToken);
+
+        return token;
     }
+
+
 }

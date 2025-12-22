@@ -1,29 +1,17 @@
 package site.ashenstation.modules.security.rest;
 
-import cn.hutool.core.util.IdUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.ashenstation.annotation.rest.AnonymousPostMapping;
-import site.ashenstation.entity.Admin;
-import site.ashenstation.enums.JwtTokenType;
 import site.ashenstation.modules.security.dto.AuthenticationDto;
-import site.ashenstation.modules.security.dto.JwtUserDto;
+import site.ashenstation.modules.security.dto.GenerateTokenDto;
 import site.ashenstation.modules.security.service.AdminService;
 import site.ashenstation.modules.security.vo.AdminInfoVo;
 import site.ashenstation.modules.security.vo.AuthResVo;
-import site.ashenstation.properties.RsaProperties;
-import site.ashenstation.utils.AmyConstants;
-import site.ashenstation.utils.RsaUtils;
-import site.ashenstation.utils.TokenProvider;
-
-import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +29,13 @@ public class AuthController {
 
     @GetMapping("info")
     @Operation(summary = "获取用户信息", description = "获取用户详细信息")
-    public ResponseEntity<AdminInfoVo> getAdminInfo(){
+    public ResponseEntity<AdminInfoVo> getAdminInfo() {
         return ResponseEntity.ok(adminService.getInfo());
+    }
+
+    @PostMapping("generate-token")
+    @Operation(summary = "创建token")
+    public ResponseEntity<String> generateToken(@RequestBody @Valid GenerateTokenDto dto) {
+        return ResponseEntity.ok(adminService.generateToken(dto));
     }
 }

@@ -27,3 +27,6 @@ swagger:
     name: ashen
     url: https://github.com/ashenfuamy
     email: ayuanshen。liu@gmail.com
+
+archive-repo:
+  uri-path: /static/arch

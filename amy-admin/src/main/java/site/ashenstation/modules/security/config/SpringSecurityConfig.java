@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -23,9 +22,11 @@ import org.springframework.web.filter.CorsFilter;
 import site.ashenstation.config.security.JwtAccessDeniedHandler;
 import site.ashenstation.config.security.JwtAuthenticationEntryPoint;
 import site.ashenstation.enums.RequestMethodEnum;
-import site.ashenstation.modules.security.service.AdminService;
+import site.ashenstation.mapper.AdminMapper;
+import site.ashenstation.mapper.CustomTokenMapper;
 import site.ashenstation.properties.SecurityProperties;
 import site.ashenstation.utils.AnonTagUtils;
+import site.ashenstation.utils.RedisUtils;
 import site.ashenstation.utils.TokenProvider;
 
 import java.util.Map;
@@ -43,6 +44,9 @@ public class SpringSecurityConfig {
     private final CorsFilter corsFilter;
     private final TokenProvider tokenProvider;
     private final SecurityProperties securityProperties;
+    private final RedisUtils redisUtils;
+    private final CustomTokenMapper customTokenMapper;
+    private final AdminMapper adminMapper;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -81,6 +85,7 @@ public class SpringSecurityConfig {
                                     "/amy/version/**",
                                     "/static/arch/**"
                             ).permitAll()
+                            .requestMatchers("/api/version/amy/publish").permitAll()
                             .anyRequest().authenticated();
                 }).with(securityConfigurerAdapter(), Customizer.withDefaults());
 
@@ -88,6 +93,6 @@ public class SpringSecurityConfig {
     }
 
     private TokenConfigurer securityConfigurerAdapter() {
-        return new TokenConfigurer(tokenProvider, securityProperties);
+        return new TokenConfigurer(tokenProvider, securityProperties, redisUtils, adminMapper, customTokenMapper);
     }
 }

@@ -22,11 +22,16 @@ spring:
     username: root
     password: amy_123456
     hikari:
-      maximum-pool-size: 20
-      minimum-idle: 5
-      connection-timeout: 30000
-      idle-timeout: 600000
-      max-lifetime: 1800000
+      # 连接的最大生命周期，单位毫秒。应比数据库的 wait_timeout 小几分钟。
+      # 这里设置为 55 分钟（3300000ms），比默认的 8 小时（28800s）短很多。
+      max-lifetime: 3300000
+      # 保持连接活跃的心跳间隔，单位毫秒。用于在连接空闲时定期向数据库发送“保活”信号。
+      # 这有助于防止连接被数据库因空闲而关闭。该值必须小于 max-lifetime。
+      keepalive-time: 240000
+      # 连接池中最大连接数。根据应用负载调整，避免过大或过小。
+      maximum-pool-size: 10
+      # 验证连接是否有效的超时时间，单位毫秒。
+      validation-timeout: 3000
 
 jwt:
   # 必须使用最少88位的Base64对该令牌进行编码
@@ -39,3 +44,7 @@ springdoc:
     enabled: true # 开启API文档生成（默认true）
   swagger-ui:
     enabled: true # 开启Swagger UI（默认true）
+
+archive-repo:
+  root: C:\Users\shen\Documents\AMY\resource\archive
+  amy-archive-directory: amy
