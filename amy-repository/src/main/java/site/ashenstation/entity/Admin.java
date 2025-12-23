@@ -18,10 +18,11 @@ import java.util.List;
 public class Admin extends BaseUser {
     @Id(keyType = KeyType.Auto)
     private Integer id;
+    private Boolean isSuperAdmin;
 
     @RelationManyToMany(
             joinTable = "sys_admin_permission",
-            selfField = "id", joinSelfColumn="admin_id",
+            selfField = "id", joinSelfColumn = "admin_id",
             targetField = "id", joinTargetColumn = "permission_id"
     )
     private List<Permission> permissions;

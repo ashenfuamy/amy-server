@@ -7,6 +7,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import site.ashenstation.mapper.AdminMapper;
 import site.ashenstation.mapper.CustomTokenMapper;
+import site.ashenstation.mapper.PermissionMapper;
 import site.ashenstation.properties.SecurityProperties;
 import site.ashenstation.utils.RedisUtils;
 import site.ashenstation.utils.TokenProvider;
@@ -18,10 +19,11 @@ public class TokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFi
     private final RedisUtils redisUtils;
     private final AdminMapper adminMapper;
     private final CustomTokenMapper customTokenMapper;
+    private final PermissionMapper permissionMapper;
 
     @Override
     public void configure(HttpSecurity builder) {
-        TokenFilter tokenFilter = new TokenFilter(tokenProvider, securityProperties, redisUtils, adminMapper, customTokenMapper);
+        TokenFilter tokenFilter = new TokenFilter(tokenProvider, securityProperties, redisUtils, adminMapper, customTokenMapper, permissionMapper);
         builder.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

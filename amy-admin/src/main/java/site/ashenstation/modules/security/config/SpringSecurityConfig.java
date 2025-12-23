@@ -24,6 +24,8 @@ import site.ashenstation.config.security.JwtAuthenticationEntryPoint;
 import site.ashenstation.enums.RequestMethodEnum;
 import site.ashenstation.mapper.AdminMapper;
 import site.ashenstation.mapper.CustomTokenMapper;
+import site.ashenstation.mapper.PermissionMapper;
+import site.ashenstation.properties.FileProperties;
 import site.ashenstation.properties.SecurityProperties;
 import site.ashenstation.utils.AnonTagUtils;
 import site.ashenstation.utils.RedisUtils;
@@ -47,6 +49,8 @@ public class SpringSecurityConfig {
     private final RedisUtils redisUtils;
     private final CustomTokenMapper customTokenMapper;
     private final AdminMapper adminMapper;
+    private final PermissionMapper permissionMapper;
+    private final FileProperties fileProperties;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -83,7 +87,8 @@ public class SpringSecurityConfig {
                                     "/swagger-resources/**",
                                     "/webjars/**",
                                     "/amy/version/**",
-                                    "/static/arch/**"
+                                    "/static/arch/**",
+                                    fileProperties.getPublishResourcePrefix() + "/**"
                             ).permitAll()
                             .requestMatchers("/api/version/amy/publish").permitAll()
                             .anyRequest().authenticated();
@@ -93,6 +98,6 @@ public class SpringSecurityConfig {
     }
 
     private TokenConfigurer securityConfigurerAdapter() {
-        return new TokenConfigurer(tokenProvider, securityProperties, redisUtils, adminMapper, customTokenMapper);
+        return new TokenConfigurer(tokenProvider, securityProperties, redisUtils, adminMapper, customTokenMapper, permissionMapper);
     }
 }

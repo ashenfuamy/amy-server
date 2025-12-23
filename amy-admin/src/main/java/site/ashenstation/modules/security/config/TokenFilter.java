@@ -26,6 +26,7 @@ import site.ashenstation.exception.BadRequestException;
 import site.ashenstation.exception.JwtTokenException;
 import site.ashenstation.mapper.AdminMapper;
 import site.ashenstation.mapper.CustomTokenMapper;
+import site.ashenstation.mapper.PermissionMapper;
 import site.ashenstation.properties.SecurityProperties;
 import site.ashenstation.utils.AmyConstants;
 import site.ashenstation.utils.RedisUtils;
@@ -46,6 +47,7 @@ public class TokenFilter extends GenericFilterBean {
     private final RedisUtils redisUtils;
     private final AdminMapper adminMapper;
     private final CustomTokenMapper customTokenMapper;
+    private final PermissionMapper permissionMapper;
 
 
     @Override
@@ -77,14 +79,26 @@ public class TokenFilter extends GenericFilterBean {
                         }
                     }
                 } else {
+
                     Admin admin
                             = adminMapper.selectOneWithRelationsByQuery(QueryWrapper.create().select().where(AdminTableDef.ADMIN.USERNAME.eq(username)));
-                    List<Permission> permissions = admin.getPermissions();
-                    permissions.forEach(c -> {
-                        String p = c.getField() + ":" + c.getCode();
-                        redisUtils.sSet(key, p);
-                        grantedAuthorities.add(new SimpleGrantedAuthority(p));
-                    });
+
+                    Boolean isSuperAdmin = admin.getIsSuperAdmin();
+
+                    if (isSuperAdmin) {
+                        List<Permission> permissions = permissionMapper.selectAll();
+                        for (Permission permission : permissions) {
+                            redisUtils.sSet(key, permission.getField() + ":" + permission.getCode());
+                            grantedAuthorities.add(new SimpleGrantedAuthority(permission.getField() + ":" + permission.getCode()));
+                        }
+                    } else {
+                        List<Permission> permissions = admin.getPermissions();
+                        permissions.forEach(c -> {
+                            String p = c.getField() + ":" + c.getCode();
+                            redisUtils.sSet(key, p);
+                            grantedAuthorities.add(new SimpleGrantedAuthority(p));
+                        });
+                    }
                 }
             }
 

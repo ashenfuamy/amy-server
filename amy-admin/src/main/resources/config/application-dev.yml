@@ -48,3 +48,11 @@ springdoc:
 archive-repo:
   root: C:\Users\shen\Documents\AMY\resource\archive
   amy-archive-directory: amy
+
+file:
+  poster-root: C:\Users\shen\Documents\AMY\resource\poster
+  avatar-root: C:\Users\shen\Documents\AMY\resource\avatar
+  publish-resource-root: C:\Users\shen\Documents\AMY\resource\publish
+  video-roots:
+    - { name: 'base', order: 1, path: C:\Users\shen\Documents\AMY\resource\video }
+  enable-video-root: base

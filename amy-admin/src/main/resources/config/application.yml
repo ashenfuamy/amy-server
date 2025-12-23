@@ -30,3 +30,11 @@ swagger:
 
 archive-repo:
   uri-path: /static/arch
+
+file:
+  avatar-resource-prefix: /resource/avatar
+  image-ext: .webp
+  poster-resource-prefix: /resource/poster
+  video-resource-prefix: /resource/video
+  upload-cache-key: 'upload-file:'
+  publish-resource-prefix: /resource/public
