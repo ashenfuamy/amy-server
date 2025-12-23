@@ -47,6 +47,11 @@ public class GlobalExceptionHandler {
         return GlobalExceptionHandler.buildResponseEntity(ApiError.error(ex.getMessage()));
     }
 
+    @ExceptionHandler(JwtTokenException.class)
+    public ResponseEntity<?> handleJwtTokenException(JwtTokenException e) {
+        return GlobalExceptionHandler.buildResponseEntity(ApiError.error(HttpStatus.UNAUTHORIZED, "登录令牌已失效"));
+    }
+
     public static ResponseEntity<ApiError> buildResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
     }

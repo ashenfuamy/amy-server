@@ -1,5 +1,6 @@
 package site.ashenstation.modules.security.service;
 
+import cn.hutool.core.util.IdUtil;
 import com.mybatisflex.core.update.UpdateChain;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class UserService {
         HashMap<String, String> claims = new HashMap<>();
         claims.put(AmyConstants.JWT_CLAIM_USER_ID, String.valueOf(user.getId()));
         claims.put(AmyConstants.JWT_CLAIM_USERNAME, user.getUsername());
+        claims.put(AmyConstants.JWT_CLAIM_UID, IdUtil.fastUUID());
 
         String token = tokenProvider.createToken(user.getUsername(), claims);
 

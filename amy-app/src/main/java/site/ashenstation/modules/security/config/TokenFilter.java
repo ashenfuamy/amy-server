@@ -56,7 +56,7 @@ public class TokenFilter extends GenericFilterBean {
                 List<GrantedAuthority> permissions = new ArrayList<>();
 
                 String username = claims.getSubject();
-                Integer userId = claims.get(AmyConstants.JWT_CLAIM_USER_ID, Integer.class);
+                String userId = claims.get(AmyConstants.JWT_CLAIM_USER_ID, String.class);
 
                 String key = securityProperties.getResourcePermissionKey() + username;
                 Set<Object> members = redisUtils.members(key);
@@ -75,7 +75,7 @@ public class TokenFilter extends GenericFilterBean {
                     userResourcePermissions.forEach(up -> {
                        if (up.getExpireTimestamp() == null || new Date().before(up.getExpireTimestamp())) {
                            String permission = String.valueOf(up.getResourceId());
-                           permissions.add(new SimpleGrantedAuthority(""));
+                           permissions.add(new SimpleGrantedAuthority(permission));
                            redisUtils.sSet(key, permission);
                        }
                     });

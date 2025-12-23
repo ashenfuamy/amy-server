@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.ashenstation.entity.User;
+import site.ashenstation.entity.UserResourcePermission;
 import site.ashenstation.entity.table.UserTableDef;
 import site.ashenstation.exception.BadRequestException;
 import site.ashenstation.mapper.UserMapper;
+import site.ashenstation.mapper.UserResourcePermissionMapper;
 import site.ashenstation.modules.appuser.dto.CreateUserDto;
 import site.ashenstation.properties.FileProperties;
 
@@ -23,6 +25,7 @@ import java.util.Date;
 public class UserService {
     private final UserMapper userMapper;
     private final FileProperties fileProperties;
+    private final UserResourcePermissionMapper userResourcePermissionMapper;
 
     @Transactional
     public Integer createUser(CreateUserDto dto) {
@@ -54,6 +57,7 @@ public class UserService {
         user.setUpdatedAt(new Date());
         user.setLastLogin(new Date());
         user.setLocked(false);
+        user.setPhoneNumber(dto.getPhone());
 
         String encodePassword = new BCryptPasswordEncoder(12).encode(dto.getPassword());
         user.setPassword(encodePassword);
@@ -70,7 +74,10 @@ public class UserService {
         }
 
         user.setAvatarPath(fileProperties.getAvatarResourcePrefix() + "/" + avatarName);
+        int i = userMapper.insertSelective(user);
 
-        return userMapper.insertSelective(user);
+        userResourcePermissionMapper.insert(new UserResourcePermission(user.getId(), avatarId));
+
+        return i;
     }
 }
