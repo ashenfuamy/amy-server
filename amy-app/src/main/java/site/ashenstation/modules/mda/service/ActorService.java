@@ -1,7 +1,7 @@
 package site.ashenstation.modules.mda.service;
 
 import cn.hutool.core.util.IdUtil;
-import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.query.QueryChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,14 @@ import site.ashenstation.mapper.ActorMapper;
 import site.ashenstation.mapper.ActorTagMapper;
 import site.ashenstation.mapper.UserResourcePermissionMapper;
 import site.ashenstation.modules.mda.dto.CreateActorDto;
+import site.ashenstation.modules.mda.vo.ActorListByClassifyTagVo;
 import site.ashenstation.properties.FileProperties;
 import site.ashenstation.utils.SecurityUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -73,13 +75,31 @@ public class ActorService {
 
         actorMapper.insert(actor);
 
-        userResourcePermissionMapper.insert( new UserResourcePermission(Integer.valueOf(currentUserId), avatarId));
+        userResourcePermissionMapper.insert(new UserResourcePermission(Integer.valueOf(currentUserId), avatarId));
 
         return true;
     }
 
+    public List<ActorTag> getActorTags() {
+        return actorTagMapper.selectAll();
+    }
 
-    public void getActorListByClassifyTag() {
 
+    public Boolean getActorListByClassifyTag() {
+        List<ActorListByClassifyTagVo> actorListByClassifyTagVos = QueryChain.of(actorTagMapper)
+                .select(
+                        ActorTagTableDef.ACTOR_TAG.ID,
+                        ActorTagTableDef.ACTOR_TAG.TITLE,
+                        ActorTableDef.ACTOR.ID,
+                        ActorTableDef.ACTOR.NAME,
+                        ActorTableDef.ACTOR.TAG_ID
+                )
+                .from(ActorTagTableDef.ACTOR_TAG)
+                .leftJoin(ActorTableDef.ACTOR).on(ActorTagTableDef.ACTOR_TAG.ID.eq(ActorTableDef.ACTOR.TAG_ID))
+                .listAs(ActorListByClassifyTagVo.class);
+
+        System.out.println(actorListByClassifyTagVos);
+
+        return true;
     }
 }
