@@ -7,7 +7,8 @@ import site.ashenstation.entity.ActorTag;
 
 @Data
 @ToString
-public class CreateActorDto {
+public class ActorDto {
+    private Integer id;
     private String name;
     private String Introduction;
     private String country;

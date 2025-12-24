@@ -22,7 +22,4 @@ public class Actor {
     private Date createTime;
     private String country;
     private String website;
-
-    @RelationOneToOne(selfField = "tagId", targetField = "id")
-    private ActorTag tag;
 }

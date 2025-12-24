@@ -16,7 +16,7 @@ import site.ashenstation.exception.BadRequestException;
 import site.ashenstation.mapper.ActorMapper;
 import site.ashenstation.mapper.ActorTagMapper;
 import site.ashenstation.mapper.UserResourcePermissionMapper;
-import site.ashenstation.modules.mda.dto.CreateActorDto;
+import site.ashenstation.modules.mda.dto.ActorDto;
 import site.ashenstation.modules.mda.vo.ActorListByClassifyTagVo;
 import site.ashenstation.properties.FileProperties;
 import site.ashenstation.utils.SecurityUtils;
@@ -38,7 +38,7 @@ public class ActorService {
 
     @Transactional
     @UpdateResourceCache
-    public Boolean createActor(CreateActorDto dto) {
+    public Boolean createActor(ActorDto dto) {
         String currentUserId = SecurityUtils.getCurrentUserId();
         Actor exist = actorMapper.selectOneByCondition(
                 ActorTableDef.ACTOR.CREATOR_ID.eq(currentUserId)
@@ -80,26 +80,82 @@ public class ActorService {
         return true;
     }
 
+    @Transactional
+    public Boolean updateActor(ActorDto dto) {
+        Integer id = dto.getId();
+        if (id == null) {
+            throw new BadRequestException("ID 不存在");
+        }
+
+        Actor actor = actorMapper.selectOneById(id);
+
+        actor.setName(dto.getName());
+        actor.setCountry(dto.getCountry());
+        actor.setIntroduction(dto.getIntroduction());
+        actor.setWebsite(dto.getWebsite());
+
+        if (dto.getActorTag().getId() == null) {
+            actorTagMapper.insert(dto.getActorTag());
+        }
+        actor.setTagId(dto.getActorTag().getId());
+
+        actorMapper.update(actor);
+
+        return true;
+    }
+
+
+    @Transactional
+    public Boolean updateActorAvatar(ActorDto dto) {
+        Integer id = dto.getId();
+        if (id == null) {
+            throw new BadRequestException("ID 不存在");
+        }
+
+        Actor actor = actorMapper.selectOneById(id);
+
+        String avatarId = IdUtil.fastSimpleUUID();
+        String avatarName = avatarId + fileProperties.getImageExt();
+        File avatarDest = new File(fileProperties.getAvatarRoot(), avatarName);
+
+        try {
+            dto.getAvatarFile().transferTo(avatarDest);
+        } catch (IOException e) {
+            throw new BadRequestException(e.getMessage());
+        }
+
+        actor.setAvatarPath(fileProperties.getAvatarResourcePrefix() + "/" + avatarName);
+
+        return true;
+    }
+
+    public Integer deleteActor(Integer id){
+        return actorMapper.deleteById(id);
+    }
+
     public List<ActorTag> getActorTags() {
         return actorTagMapper.selectAll();
     }
 
 
-    public Boolean getActorListByClassifyTag() {
-        List<ActorListByClassifyTagVo> actorListByClassifyTagVos = QueryChain.of(actorTagMapper)
+    public List<ActorListByClassifyTagVo> getActorListByClassifyTag() {
+
+        String currentUserId = SecurityUtils.getCurrentUserId();
+
+        return QueryChain.of(actorTagMapper)
                 .select(
                         ActorTagTableDef.ACTOR_TAG.ID,
                         ActorTagTableDef.ACTOR_TAG.TITLE,
                         ActorTableDef.ACTOR.ID,
                         ActorTableDef.ACTOR.NAME,
-                        ActorTableDef.ACTOR.TAG_ID
+                        ActorTableDef.ACTOR.TAG_ID,
+                        ActorTableDef.ACTOR.INTRODUCTION,
+                        ActorTableDef.ACTOR.AVATAR_PATH,
+                        ActorTableDef.ACTOR.CREATOR_ID
                 )
                 .from(ActorTagTableDef.ACTOR_TAG)
                 .leftJoin(ActorTableDef.ACTOR).on(ActorTagTableDef.ACTOR_TAG.ID.eq(ActorTableDef.ACTOR.TAG_ID))
+                .where(ActorTableDef.ACTOR.CREATOR_ID.eq(currentUserId))
                 .listAs(ActorListByClassifyTagVo.class);
-
-        System.out.println(actorListByClassifyTagVos);
-
-        return true;
     }
 }
