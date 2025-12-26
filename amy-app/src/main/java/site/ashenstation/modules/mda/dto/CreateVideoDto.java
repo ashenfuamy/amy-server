@@ -13,11 +13,10 @@ import java.util.List;
 
 @Data
 @ToString
-public class CreateSerialDto {
+public class CreateVideoDto {
     @NotBlank(message = "标题不能为空")
     private String title;
     private String subtitle;
-    @NotNull(message = "是否打码不能为空")
     private Integer mosaicType;
     private String serialNumber;
     private MdaPublisher publisher;
@@ -27,4 +26,7 @@ public class CreateSerialDto {
     private List<Integer> actors;
 
     private List<MdaTag> tags;
+
+    private Long size;
+    private Integer serialId;
 }

@@ -5,6 +5,7 @@ import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.ToString;
+import site.ashenstation.enums.MdaTagType;
 
 @Data
 @ToString
@@ -13,4 +14,5 @@ public class MdaTag {
     @Id(keyType = KeyType.Auto)
     private Integer id;
     private String title;
+    private MdaTagType type;
 }

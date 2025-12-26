@@ -12,4 +12,9 @@ public class MdaSummaryTag {
     private Integer id;
     private Integer summaryId;
     private Integer tagId;
+
+    public MdaSummaryTag(Integer summaryId, Integer tagId) {
+        this.summaryId = summaryId;
+        this.tagId = tagId;
+    }
 }
