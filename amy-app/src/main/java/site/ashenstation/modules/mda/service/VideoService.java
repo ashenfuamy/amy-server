@@ -37,7 +37,7 @@ public class VideoService {
             mdaVideo.setConverted(false);
             mdaVideo.setSummaryId(mdaSummary.getId());
             mdaVideo.setSeriesId(dto.getSerialId());
-            
+
         }
 
 
