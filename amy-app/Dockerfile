@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.9_10-jdk-ubi9-minimal
+FROM jdk21_ffpmeg:latest
 LABEL authors="ashen"
 
 COPY build/libs/amy-app.jar /app.jar

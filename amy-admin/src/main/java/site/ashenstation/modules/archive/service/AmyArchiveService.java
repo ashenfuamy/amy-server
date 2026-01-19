@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import site.ashenstation.entity.Archive;
 import site.ashenstation.entity.table.ArchiveTableDef;
-import site.ashenstation.enums.ArchiveStatus;
 import site.ashenstation.exception.BadRequestException;
 import site.ashenstation.mapper.ArchiveMapper;
 import site.ashenstation.modules.archive.config.properties.ArchiveRepositoryProperties;

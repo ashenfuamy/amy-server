@@ -19,4 +19,5 @@ public class MdaVideo {
     private String relativePath;
     private Boolean converted;
     private Integer seriesId;
+    private Long duration;
 }

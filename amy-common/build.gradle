@@ -6,6 +6,7 @@ group = 'site.ashenstation'
 version = 'unspecified'
 
 dependencies {
-
+    implementation project(":amy-repository")
+    implementation project(":amy-enum")
 }
 

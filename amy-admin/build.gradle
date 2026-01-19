@@ -8,4 +8,5 @@ version = 'unspecified'
 dependencies {
     implementation project(":amy-common")
     implementation project(":amy-repository")
+    implementation project(":amy-enum")
 }

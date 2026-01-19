@@ -8,15 +8,17 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 import site.ashenstation.entity.MdaPublisher;
 import site.ashenstation.entity.MdaTag;
+import site.ashenstation.utils.SummaryDto;
 
 import java.util.List;
 
 @Data
 @ToString
-public class CreateVideoDto {
+public class CreateVideoDto implements SummaryDto {
     @NotBlank(message = "标题不能为空")
     private String title;
     private String subtitle;
+    @NotNull(message = "是否打码不能为空")
     private Integer mosaicType;
     private String serialNumber;
     private MdaPublisher publisher;
@@ -29,4 +31,6 @@ public class CreateVideoDto {
 
     private Long size;
     private Integer serialId;
+    private Integer totalChunk;
+    private String ext;
 }

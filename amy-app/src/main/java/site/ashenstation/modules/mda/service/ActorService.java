@@ -129,7 +129,7 @@ public class ActorService {
         return true;
     }
 
-    public Integer deleteActor(Integer id){
+    public Integer deleteActor(Integer id) {
         return actorMapper.deleteById(id);
     }
 
@@ -157,5 +157,9 @@ public class ActorService {
                 .leftJoin(ActorTableDef.ACTOR).on(ActorTagTableDef.ACTOR_TAG.ID.eq(ActorTableDef.ACTOR.TAG_ID))
                 .where(ActorTableDef.ACTOR.CREATOR_ID.eq(currentUserId))
                 .listAs(ActorListByClassifyTagVo.class);
+    }
+
+    public List<Actor> getActors() {
+        return actorMapper.selectAll();
     }
 }

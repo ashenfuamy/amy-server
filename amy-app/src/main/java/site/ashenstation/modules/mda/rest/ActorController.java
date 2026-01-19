@@ -3,6 +3,7 @@ package site.ashenstation.modules.mda.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import site.ashenstation.entity.Actor;
 import site.ashenstation.entity.ActorTag;
 import site.ashenstation.modules.mda.dto.ActorDto;
 import site.ashenstation.modules.mda.service.ActorService;
@@ -46,4 +47,10 @@ public class ActorController {
     public ResponseEntity<List<ActorListByClassifyTagVo>> getListByClassifyTag() {
         return ResponseEntity.ok(actorService.getActorListByClassifyTag());
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Actor>> getActors() {
+        return ResponseEntity.ok(actorService.getActors());
+    }
+
 }

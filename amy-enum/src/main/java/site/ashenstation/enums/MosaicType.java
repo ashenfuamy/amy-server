@@ -1,24 +1,26 @@
 package site.ashenstation.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.mybatisflex.annotation.EnumValue;
 import lombok.AllArgsConstructor;
 
 import java.util.Objects;
 
 @AllArgsConstructor
-public enum MdaTagType {
-    ADULT(0),
-    OTHER(1);
+public enum MosaicType {
+    MOSAIC(1),
+    WITHOUT_MOSAIC(0);
 
     private final Integer type;
 
     @EnumValue
+    @JsonValue
     public Integer getType() {
         return type;
     }
 
-    public static MdaTagType find(Integer type) {
-        for (MdaTagType value : MdaTagType.values()) {
+    public static MosaicType find(Integer type) {
+        for (MosaicType value : MosaicType.values()) {
             if (Objects.equals(value.getType(), type)) {
                 return value;
             }

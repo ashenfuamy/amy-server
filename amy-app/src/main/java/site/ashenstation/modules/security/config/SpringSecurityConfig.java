@@ -82,7 +82,8 @@ public class SpringSecurityConfig {
                                     "/swagger-resources/**",
                                     "/webjars/**",
                                     "/amy/version/**",
-                                    "/static/arch/**"
+                                    "/static/arch/**",
+                                    "/websocket/**"
                             ).permitAll()
                             .anyRequest().authenticated();
                 })

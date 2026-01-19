@@ -27,7 +27,11 @@ swagger:
     name: ashen
     url: https://github.com/ashenfuamy
     email: ayuanshen。liu@gmail.com
-    
+
+video-task-mq:
+  exchange-name: transcoding_video-exchange
+  queue-name: transcoding_video-queue
+  routing-key: TRANSCODING_VIDEO:ROUTING
 
 file:
   avatar-resource-prefix: /resource/avatar

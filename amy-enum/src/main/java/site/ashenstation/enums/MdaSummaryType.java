@@ -1,5 +1,6 @@
 package site.ashenstation.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.mybatisflex.annotation.EnumValue;
 import lombok.AllArgsConstructor;
 
@@ -13,6 +14,7 @@ public enum MdaSummaryType {
     private final Integer type;
 
     @EnumValue
+    @JsonValue
     public Integer getType() {
         return type;
     }

@@ -1,4 +1,18 @@
 spring:
+  rabbitmq:
+    host: 192.168.31.113
+    port: 5673
+    username: guest
+    password: guest
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 5
+        prefetch: 10
+    stream:
+      virtual-host: /
+
+  
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://127.0.0.1:3306/amy?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8
@@ -56,3 +70,7 @@ file:
   video-roots:
     - { name: 'base', order: 1, path: /amy/video_1 }
   publish-resource-root: /amy/public
+
+ffmpeg:
+  ffmpeg-executor-path: ffmpeg
+  ffprobe-executor-path: ffprobe

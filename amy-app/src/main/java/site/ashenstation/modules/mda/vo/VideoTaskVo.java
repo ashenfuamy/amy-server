@@ -9,8 +9,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoCreatedVo {
-    private Integer videoId;
-    private Integer summaryId;
-    private Integer status;
+public class VideoTaskVo {
+    private String taskId;
+    private Integer currentChunk;
 }

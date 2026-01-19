@@ -3,9 +3,12 @@ package site.ashenstation.modules.security.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import site.ashenstation.properties.FileProperties;
+
+import java.io.File;
 
 @Configuration
 @EnableWebMvc
@@ -23,5 +26,12 @@ public class ResourceAdapter implements WebMvcConfigurer {
 
         registry.addResourceHandler(fileProperties.getAvatarResourcePrefix() + "/**").addResourceLocations(avatarUtl);
         registry.addResourceHandler(fileProperties.getPosterResourcePrefix() + "/**").addResourceLocations(posterUtl);
+
+        ResourceHandlerRegistration resourceHandlerRegistration = registry.addResourceHandler(fileProperties.getVideoResourcePrefix() + "/**");
+        fileProperties.getVideoRoots().forEach(vr -> {
+            File file = new File(vr.getPath());
+
+            resourceHandlerRegistration.addResourceLocations("file:" + file.getAbsolutePath().replace("\\", "/") + "/");
+        });
     }
 }

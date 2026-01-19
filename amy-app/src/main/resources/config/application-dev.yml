@@ -1,4 +1,17 @@
 spring:
+  rabbitmq:
+    host: 192.168.31.113
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 5
+        prefetch: 10
+    stream:
+      virtual-host: /
+
   data:
     redis:
       host: localhost
@@ -56,3 +69,7 @@ file:
   video-roots:
     - { name: 'base', order: 1, path: C:\Users\shen\Documents\AMY\resource\video }
   enable-video-root: base
+
+ffmpeg:
+  ffmpeg-executor-path: E:\workspace\ONLYFUCK\.resource\bin\ffmpeg.exe
+  ffprobe-executor-path: E:\workspace\ONLYFUCK\.resource\bin\ffprobe.exe

@@ -8,12 +8,13 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 import site.ashenstation.entity.MdaPublisher;
 import site.ashenstation.entity.MdaTag;
+import site.ashenstation.utils.SummaryDto;
 
 import java.util.List;
 
 @Data
 @ToString
-public class CreateSerialDto {
+public class CreateSerialDto implements SummaryDto {
     @NotBlank(message = "标题不能为空")
     private String title;
     private String subtitle;
